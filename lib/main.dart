@@ -17,11 +17,34 @@ class _HomeState extends State<Home> {
   TextEditingController weigthController = TextEditingController();
   TextEditingController heigthController = TextEditingController();
 
-  void _resetFields(){
+  void _resetFields() {
     weigthController.text = "";
     heigthController.text = "";
+    setState(() {
+      _infoText = "INFORME SEUS DADOS";
+    });
 
-    _infoText = "INFORME SEUS DADOS";
+  }
+
+  void _calculate() {
+    setState(() {
+      double weight = double.parse(weigthController.text);
+      double height = double.parse(heigthController.text) ;
+      double imc = weight / (height * height);
+      if (imc < 18.6) {
+        _infoText = "Abaixo do peso (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 18.6 && imc < 24.9) {
+        _infoText = "Peso ideal (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 24.9 && imc < 29.9) {
+        _infoText = "Sobre peso (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 29.9 && imc < 34.9) {
+        _infoText = "Obesidade grau I (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 34.9 && imc < 39.9) {
+        _infoText = "Obesidade grau II (${imc.toStringAsPrecision(3)})";
+      } else {
+        _infoText = "Obesidade grau III (${imc.toStringAsPrecision(3)})";
+      }
+    });
   }
 
   @override
@@ -46,7 +69,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Icon(Icons.person_outline, size: 120.0, color: Colors.deepPurple),
             TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   labelText: "Peso (kg)",
                   labelStyle: TextStyle(color: Colors.deepPurple)),
@@ -55,7 +78,7 @@ class _HomeState extends State<Home> {
               controller: weigthController,
             ),
             TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   labelText: "Altura (m)",
                   labelStyle: TextStyle(color: Colors.deepPurple)),
@@ -68,7 +91,7 @@ class _HomeState extends State<Home> {
               child: Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: _calculate,
                   child: Text(
                     "Calcular",
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
