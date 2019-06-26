@@ -14,6 +14,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _infoText = "INFORME SEUS DADOS";
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController weigthController = TextEditingController();
   TextEditingController heigthController = TextEditingController();
 
@@ -64,48 +66,65 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Icon(Icons.person_outline, size: 120.0, color: Colors.deepPurple),
-            TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                  labelText: "Peso (kg)",
-                  labelStyle: TextStyle(color: Colors.deepPurple)),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
-              controller: weigthController,
-            ),
-            TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                  labelText: "Altura (m)",
-                  labelStyle: TextStyle(color: Colors.deepPurple)),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
-              controller: heigthController,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Container(
-                height: 50.0,
-                child: RaisedButton(
-                  onPressed: _calculate,
-                  child: Text(
-                    "Calcular",
-                    style: TextStyle(color: Colors.white, fontSize: 25.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Icon(Icons.person_outline, size: 120.0, color: Colors.deepPurple),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                    labelText: "Peso (kg)",
+                    labelStyle: TextStyle(color: Colors.deepPurple)),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
+                controller: weigthController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return "Insira seu peso!";
+                  }
+                },
+              ),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                    labelText: "Altura (m)",
+                    labelStyle: TextStyle(color: Colors.deepPurple)),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
+                controller: heigthController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return "Insira sua altura!";
+                  }
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Container(
+                  height: 50.0,
+                  child: RaisedButton(
+                    onPressed: (){
+                      if(_formKey.currentState.validate()){
+                        _calculate();
+                      }
+                    },
+                    child: Text(
+                      "Calcular",
+                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                    ),
+                    color: Colors.deepPurple,
                   ),
-                  color: Colors.deepPurple,
                 ),
               ),
-            ),
-            Text(
-              _infoText,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
-            )
-          ],
+              Text(
+                _infoText,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.deepPurple, fontSize: 25.0),
+              )
+            ],
+          ),
         ),
       ),
     );
